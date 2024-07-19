@@ -1,0 +1,37 @@
+
+-- Select the database
+USE trello;
+
+-- Create Users Table
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Projects Table
+CREATE TABLE projects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Create Tasks Table
+CREATE TABLE tasks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  project_id INT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  status ENUM('Backlog', 'In Discussion', 'In Progress', 'Done') DEFAULT 'Backlog',
+  tags VARCHAR(255),
+  due_date DATE,
+  assigned_user INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+  FOREIGN KEY (assigned_user) REFERENCES users(id) ON DELETE SET NULL
+);
